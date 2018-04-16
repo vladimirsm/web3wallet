@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+  <title>Blockchain task</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Custom styles for this template -->
+  <link href="css/jumbotron.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="navbar-brand" href="#">Currently logged in as:
+      <span id="currentUser"></span>
+    </div>
+
+  </nav>
+
+  <main role="main">
+
+
+    <div class="container mt-3">
+      <!-- Example row of columns -->
+      <div class="row">
+        <!-- Generate new account block -->
+        <div class="col-md-4">
+          <h2>Generate new Keypair</h2>
+          <form>
+            <div class="form-group">
+              <label for="outputPublicKey">Public key</label>
+              <input type="text" class="form-control" id="outputPublicKey" disabled>
+            </div>
+            <div class="form-group">
+              <label for="outputPrivateKey">Private key</label>
+              <input type="text" class="form-control" id="outputPrivateKey" disabled>
+            </div>
+            <button type="button" id="generateButton" class="btn btn-primary">Generate</button>
+          </form>
+          <hr>
+          <!-- Login form -->
+          <h2>Login</h2>
+          
+          <form>
+            <div class="form-group">
+              <label for="inputPrivateKey">Private key</label>
+              <input type="text" class="form-control" id="inputPrivateKey" placeholder="Enter your private key">
+            </div>
+            
+            <button type="button" id="login" class="btn btn-primary">Login</button>
+           <br>
+           <small>Use this private key for testing: 0x8bb5633e3f25f4890dbb092d73f9dcdfbf11711210bf805708b76c61fee839a4</small>
+          </form>
+          
+        </div>
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs nav-fill" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="balances-tab" data-toggle="tab" href="#balances" role="tab" aria-controls="balances" aria-selected="true">Balances</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="deploy-tab" data-toggle="tab" href="#deploy" role="tab" aria-controls="deploy" aria-selected="false">Deploy contract</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="transfer-tab" data-toggle="tab" href="#transfer" role="tab" aria-controls="transfer" aria-selected="false">Transfer</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="buysell-tab" data-toggle="tab" href="#buysell" role="tab" aria-controls="buysell" aria-selected="false">Buy/Sell</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <!-- Balance tab -->
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="balances" role="tabpanel" aria-labelledby="balances-tab">
+                  <p>Balances updates automatically on every block.</p>
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <label for="displayEthBalance">ETH balance</label>
+                      <input type="text" id="displayEthBalance" class="form-control mx-4" disabled>
+                    </div>
+                  </form>
+                  <br>
+                  <table id="contractTable" class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Contract</th>
+                        <th scope="col">Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                  <small>Default contract is loaded. New deployed contracts will appear here.</small>
+                </div>
+                <!-- Deploy Contract tab -->
+                <div class="tab-pane fade" id="deploy" role="tabpanel" aria-labelledby="deploy-tab">
+                  <div class="alert alert-info" id="alertMessage" role="alert">Default contract data is loaded. To deploy your own contract update binary and json data.
+                  </div>
+                  <form>
+                    <div class="form-group">
+                      <label for="contractByteCode">Byte Code</label>
+                      <textarea class="form-control" id="contractByteCode" rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="contractJSONInterface">JSON Interface</label>
+                      <textarea class="form-control" id="contractJSONInterface" rows="5"></textarea>
+                    </div>
+                  </form>
+                  <button type="button" id="deployContract" class="btn btn-primary">Deploy</button>
+                </div>
+                <!-- Send tab -->
+                <div class="tab-pane fade" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
+                  <h2>Send ETH/token</h2>
+                  <div class="alert alert-info" id="transactionAlertMessage" role="alert">You can send your assets to other accounts.
+                  </div>
+                  <form>
+                    <div class="form-group" id="transactionContractList">
+                      <label for="gridRadios">Select asset</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="gridRadios" id="eth" value="eth" checked>
+                        <label class="form-check-label" for="gridRadios1">
+                          ETH
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="addressTo">Address To</label>
+                      <input type="text" class="form-control" id="addressTo" placeholder="0x000000000000000000000">
+                    </div>
+                    <div class="form-group">
+                      <label for="amount">Amount</label>
+                      <input type="text" class="form-control" id="amount" placeholder="0.00">
+                    </div>
+                    <button type="button" id="sendButton" class="btn btn-primary">Send</button>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="buysell" role="tabpanel" aria-labelledby="buysell-tab">
+                  <h2>Buy/Sell tokens</h2>
+                  <div class="alert alert-info" id="buySellAlertMessage" role="alert"> You can exchange your deployed Tokens to ETH. Check if the contract has enought ETH to convert.
+                  </div>
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <label for="exchangePriceEth">Current price</label>
+                      <input type="text" id="exchangePriceEth" placeholder="1 ETH" class="form-control mx-4" disabled> =
+                      <input type="text" id="exchangePriceToken" class="form-control mx-4" disabled>
+                    </div>
+                  </form>
+                  <form>
+                    <div class="form-group" id="exchangeContractList">
+                      <label for="gridRadios">Select asset</label>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="tokenAmount">Token amount</label>
+                      <input type="text" class="form-control" id="tokenAmount" placeholder="0.00">
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" id="buyButton" class="btn btn-success">Buy</button>
+                      <button type="button" id="sellButton" class="btn btn-danger">Sell</button>
+
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+    <!-- /container -->
+  </main>
+  <footer class="container">
+    <p>&copy; Blockchain Test assignment</p>
+  </footer>
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')</script>
+  <script src="bundle.js"></script>
+  <script src="js/vendor/popper.min.js"></script>
+  <script src="js/vendor/bootstrap.min.js"></script>
+</body>
+
+</html>
